@@ -9,14 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/instructors")
-@CrossOrigin(origins = "*")
 public class InstructorController {
 
     @Autowired
     private InstructorService service;
 
-    @PostMapping
+    @PostMapping("/addInstructor")
     public ResponseEntity<?> addInstructor(@RequestBody Instructor ins) {
         try {
             Instructor saved = service.addInstructor(ins);
@@ -26,7 +24,7 @@ public class InstructorController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/getAllInstructors")
     public ResponseEntity<?> getAllInstructors() {
         try {
             List<Instructor> instructors = service.getAllInstructors();
@@ -36,48 +34,28 @@ public class InstructorController {
         }
     }
 
-    @GetMapping("/{id}")
+    // These methods are not required for the current test file, but you can keep them for full CRUD
+
+    @GetMapping("/instructor/get/{id}")
     public ResponseEntity<?> getInstructorById(@PathVariable Long id) {
         Instructor ins = service.getInstructorById(id);
-        if (ins != null) {
-            return ResponseEntity.ok(ins);
-        } else {
-            return ResponseEntity.status(404).body("Instructor not found");
-        }
+        return ins != null ? ResponseEntity.ok(ins) : ResponseEntity.status(404).body("Instructor not found");
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<?> getInstructorByName(@PathVariable String name) {
-        Instructor ins = service.getInstructorByName(name);
-        if (ins != null) {
-            return ResponseEntity.ok(ins);
-        } else {
-            return ResponseEntity.status(404).body("Instructor not found");
-        }
-    }
-
-    @PutMapping("/{id}")
+    @PutMapping("/instructor/put/{id}")
     public ResponseEntity<?> updateInstructor(@PathVariable Long id, @RequestBody Instructor updated) {
         try {
             Instructor result = service.updateInstructor(id, updated);
-            if (result != null) {
-                return ResponseEntity.ok(result);
-            } else {
-                return ResponseEntity.status(404).body("Instructor not found");
-            }
+            return result != null ? ResponseEntity.ok(result) : ResponseEntity.status(404).body("Instructor not found");
         } catch (InvalidCertificationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/instructor/delete/{id}")
     public ResponseEntity<?> deleteInstructor(@PathVariable Long id) {
         boolean deleted = service.deleteInstructor(id);
-        if (deleted) {
-            return ResponseEntity.ok("Instructor deleted successfully.");
-        } else {
-            return ResponseEntity.status(404).body("Instructor not found");
-        }
+        return deleted ? ResponseEntity.ok("Instructor deleted successfully.") : ResponseEntity.status(404).body("Instructor not found");
     }
 
     @ExceptionHandler(InvalidCertificationException.class)
