@@ -27,7 +27,7 @@ public class Instructor {
 
     private String yogaSpecialty;
 
-    private String classPreference; // e.g., Online / Offline
+    private String classPreference; 
 
     @Schema(description = "Phone number of instructor")
     private String phoneNumber;
