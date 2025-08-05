@@ -34,7 +34,7 @@ public class SlotService {
         if (existing != null) {
             existing.setStartTime(updated.getStartTime());
             existing.setEndTime(updated.getEndTime());
-            existing.setBooked(updated.isBooked());
+            existing.setAvailable(updated.isAvailable());
             return slotRepo.save(existing);
         }
         return null;

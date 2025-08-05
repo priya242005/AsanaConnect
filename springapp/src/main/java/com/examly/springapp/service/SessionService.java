@@ -36,6 +36,8 @@ public class SessionService {
     public Session updateSession(Long id, Session updated) {
         Session existing = repo.findById(id).orElse(null);
         if (existing != null) {
+            existing.setLearnerId(updated.getLearnerId());
+            existing.setInstructorId(updated.getInstructorId());
             existing.setSlotId(updated.getSlotId());
             existing.setTotalPrice(updated.getTotalPrice());
             existing.setStatus(updated.getStatus());
