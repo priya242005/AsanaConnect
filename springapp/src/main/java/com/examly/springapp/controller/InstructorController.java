@@ -1,84 +1,84 @@
 package com.examly.springapp.controller;
 
-import com.examly.springapp.exception.InvalidCertificationException;
-import com.examly.springapp.model.Instructor;
-import com.examly.springapp.service.InstructorService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import com.examly.springapp.exception.InvalidCertificationException;
+import com.examly.springapp.model.Instructor;
+import com.examly.springapp.service.InstructorService;
 
 @RestController
-@RequestMapping("/api/instructor")
+@RequestMapping("/api/instructors") 
 public class InstructorController {
 
     @Autowired
-    private InstructorService service;
+    private InstructorService obj;
 
-    @PostMapping("/add")
+   
+    @PostMapping
     public ResponseEntity<?> addInstructor(@RequestBody Instructor ins) {
         try {
-            Instructor saved = service.addInstructor(ins);
+            Instructor saved = obj.addInstructor(ins);
             return ResponseEntity.ok(saved);
         } catch (InvalidCertificationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/getall")
+  
+    @GetMapping
     public ResponseEntity<?> getAllInstructors() {
         try {
-            List<Instructor> instructors = service.getAllInstructors();
+            List<Instructor> instructors = obj.getAllInstructors();
             return ResponseEntity.ok(instructors);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Something went wrong.");
         }
     }
 
+   
     @GetMapping("/{id}")
     public ResponseEntity<?> getInstructorById(@PathVariable Long id) {
-        Instructor ins = service.getInstructorById(id);
-        if (ins != null) {
-            return ResponseEntity.ok(ins);
-        } else {
-            return ResponseEntity.status(404).body("Instructor not found");
-        }
+        Instructor ins = obj.getInstructorById(id);
+        return ins != null ?
+                ResponseEntity.ok(ins) :
+                ResponseEntity.status(404).body("Instructor not found");
     }
 
+    
     @GetMapping("/name/{name}")
     public ResponseEntity<?> getInstructorByName(@PathVariable String name) {
-        Instructor ins = service.getInstructorByName(name);
-        if (ins != null) {
-            return ResponseEntity.ok(ins);
-        } else {
-            return ResponseEntity.status(404).body("Instructor not found");
-        }
+        Instructor ins = obj.getInstructorByName(name);
+        return ins != null ?
+                ResponseEntity.ok(ins) :
+                ResponseEntity.status(404).body("Instructor not found");
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateInstructor(@PathVariable Long id, @RequestBody Instructor updated) {
         try {
-            Instructor result = service.updateInstructor(id, updated);
-            if (result != null) {
-                return ResponseEntity.ok(result);
-            } else {
-                return ResponseEntity.status(404).body("Instructor not found");
-            }
+            Instructor result = obj.updateInstructor(id, updated);
+            return result != null ?
+                    ResponseEntity.ok(result) :
+                    ResponseEntity.status(404).body("Instructor not found");
         } catch (InvalidCertificationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteInstructor(@PathVariable Long id) {
-        boolean deleted = service.deleteInstructor(id);
-        if (deleted) {
-            return ResponseEntity.ok("Instructor deleted successfully.");
-        } else {
-            return ResponseEntity.status(404).body("Instructor not found");
-        }
+        boolean deleted = obj.deleteInstructor(id);
+        return deleted ?
+                ResponseEntity.ok("Instructor deleted successfully.") :
+                ResponseEntity.status(404).body("Instructor not found");
     }
 
+ 
     @ExceptionHandler(InvalidCertificationException.class)
     public ResponseEntity<String> handleCertificationException(InvalidCertificationException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
