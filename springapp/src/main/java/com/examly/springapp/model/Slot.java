@@ -36,7 +36,7 @@ public class Slot {
     private boolean isAvailable;
 
     public void setBooked(boolean available) {
-        // TODO Auto-generated method stub
+        
         throw new UnsupportedOperationException("Unimplemented method 'setBooked'");
     }
 }

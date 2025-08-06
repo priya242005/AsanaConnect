@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "General user model")
+
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -24,7 +24,7 @@ public class WellnessTracker {
     private double weight;
     private double height;
     private int sleepHours;
-    private int waterIntake; // in ml
+    private int waterIntake; 
 
     private String mood;
 

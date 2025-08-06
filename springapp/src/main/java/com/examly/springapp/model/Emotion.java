@@ -22,7 +22,7 @@ public class Emotion {
     private Long learnerId;
 
     @NotBlank(message = "Emotion type cannot be blank")
-    private String emotionType; // e.g., Happy, Anxious, Calm, etc.
+    private String emotionType;
 
     @Column(nullable = false)
     private LocalDate date;

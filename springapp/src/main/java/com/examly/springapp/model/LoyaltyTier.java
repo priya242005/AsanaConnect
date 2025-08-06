@@ -17,7 +17,7 @@ public class LoyaltyTier {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String tierName; // e.g., Bronze, Silver, Gold
+    private String tierName;
 
     @Column(nullable = false)
     private int minPoints;
