@@ -34,7 +34,6 @@ public class InstructorController {
         }
     }
 
-    // These methods are not required for the current test file, but you can keep them for full CRUD
 
     @GetMapping("/instructor/get/{id}")
     public ResponseEntity<?> getInstructorById(@PathVariable Long id) {
