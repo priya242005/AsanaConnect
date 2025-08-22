@@ -1,16 +1,33 @@
 package com.examly.springapp.model;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
-@Data
-@Setter
+
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Session {
 
     @Id
@@ -18,24 +35,23 @@ public class Session {
     private Long sessionId;
 
     @Column(nullable = false)
-    private Long learnerId;
+    private String sessionName;
 
     @Column(nullable = false)
-    private Long instructorId;
+    private LocalDateTime sessionTime;
 
     @Column(nullable = false)
-    private Long slotId;
+    private Integer durationMinutes;
 
     @Column(nullable = false)
-    private double totalPrice;
+    private String meetingLink;
 
-    @Enumerated(EnumType.STRING)
-    private SessionStatus status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instructor_id", nullable = false)
+    @JsonBackReference("instructor-session")
+    private Instructor instructor;
 
-    public enum SessionStatus {
-        CONFIRMED,
-        CANCELLED,
-        COMPLETED,
-        RESCHEDULED
-    }
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("session-booking")
+    private List<Booking> bookings;
 }

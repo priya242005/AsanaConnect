@@ -1,0 +1,365 @@
+/* InstructorDashboard.css */
+
+/* General Layout */
+.instructor-dashboard-wrapper {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9fafb;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 210px;
+  background-color: #2563eb;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+}
+
+.sidebar-nav {
+  margin-top: 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.sidebar-nav button {
+  width: 100%;
+  padding: 12px 14px;
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-nav button.active,
+.sidebar-nav button:hover {
+  background-color: #1e40af;
+  color: #fff;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9fafb;
+}
+
+/* Navbar */
+.instructor-navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: white;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09);
+}
+
+.brand {
+  margin-right: auto;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #2563eb;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-actions span {
+  font-weight: 600;
+  color: #374151;
+}
+
+.nav-actions button {
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-actions button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Content Section */
+.content-section {
+  padding: 2rem 2.5rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Welcome Section */
+.welcome-content {
+  text-align: left;
+}
+
+.welcome-content h1 {
+  color: #2563eb;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+.welcome-content p {
+  font-size: 1.1rem;
+  max-width: 600px;
+  color: #334155;
+}
+
+/* New Session Form */
+.new-session-container {
+  max-width: 450px;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+  margin: auto;
+}
+
+.new-session-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #475569;
+}
+
+.new-session-form input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 2px solid #cbd5e1;
+  margin-top: 0.3rem;
+  outline-offset: 2px;
+  transition: border-color 0.3s ease;
+}
+
+.new-session-form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.25);
+  outline: none;
+}
+
+.new-session-form button {
+  margin-top: 1.5rem;
+  width: 100%;
+  background-color: #2563eb;
+  padding: 12px 0;
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.new-session-form button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.new-session-form button:hover:not(:disabled) {
+  background-color: #1e40af;
+}
+
+.message {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #2563eb;
+  text-align: center;
+}
+
+/* Sessions List */
+.sessions-list {
+  max-width: 800px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.session-item {
+  background: white;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.session-item h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #2563eb;
+}
+
+.session-item p {
+  margin: 0.3rem 0;
+}
+
+.session-item a {
+  color: #10b981;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.session-item a:hover {
+  text-decoration: underline;
+}
+
+/* Feedback Section */
+.feedback-section {
+  max-width: 700px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.feedback-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feedback-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.feedback-item p {
+  margin: 0.3rem 0;
+}
+
+.feedback-item strong {
+  color: #2563eb;
+}
+
+/* Profile Section */
+.profile-section {
+  max-width: 500px;
+  background: white;
+  margin: auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+}
+
+.profile-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.profile-section label {
+  font-weight: 600;
+  color: #475569;
+  text-align: left;
+}
+
+.profile-section input,
+.profile-section select {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  outline-offset: 2px;
+  transition: border-color 0.3s ease;
+}
+
+.profile-section input:focus,
+.profile-section select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+  outline: none;
+}
+
+.profile-section button {
+  background-color: #2563eb;
+  color: white;
+  font-weight: 700;
+  padding: 12px 0;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-section button:hover {
+  background-color: #1e40af;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .sidebar {
+    width: 160px;
+    padding: 1.5rem 0.7rem;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .sessions-list,
+  .feedback-section,
+  .new-session-container,
+  .profile-section {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .session-item,
+  .feedback-item {
+    padding: 0.9rem 1rem;
+  }
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-content button {
+  margin-top: 1rem;
+  padding: 8px 20px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background: #1e40af;
+}

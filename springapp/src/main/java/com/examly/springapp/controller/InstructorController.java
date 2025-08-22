@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class InstructorController {
@@ -34,7 +35,6 @@ public class InstructorController {
         }
     }
 
-
     @GetMapping("/instructor/get/{id}")
     public ResponseEntity<?> getInstructorById(@PathVariable Long id) {
         Instructor ins = service.getInstructorById(id);
@@ -57,8 +57,39 @@ public class InstructorController {
         return deleted ? ResponseEntity.ok("Instructor deleted successfully.") : ResponseEntity.status(404).body("Instructor not found");
     }
 
+    // Login endpoint
+   @PostMapping("/instructor/login")
+public ResponseEntity<?> loginInstructor(@RequestBody Instructor ins) {
+    Instructor instructorDetails = service.getInstructorByName(ins.getName());
+    if (instructorDetails != null && instructorDetails.getPassword().equals(ins.getPassword())) {
+        instructorDetails.setPassword(null);  // hide password in response
+        return ResponseEntity.ok(instructorDetails);
+    }
+    return ResponseEntity.status(401).body("Invalid name or password");
+}
+
+
     @ExceptionHandler(InvalidCertificationException.class)
     public ResponseEntity<String> handleCertificationException(InvalidCertificationException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+    @PutMapping("/instructor/updatePassword/{id}")
+    public ResponseEntity<?> updatePassword(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> passwords) {
+
+        String currentPassword = passwords.get("currentPassword");
+        String newPassword = passwords.get("newPassword");
+
+        if (currentPassword == null || newPassword == null) {
+            return ResponseEntity.badRequest().body("Current and new password must be provided");
+        }
+
+        boolean updated = service.updatePassword(id, currentPassword, newPassword);
+        if (updated) {
+            return ResponseEntity.ok("Password updated successfully");
+        } else {
+            return ResponseEntity.status(400).body("Current password incorrect or update failed");
+        }
     }
 }

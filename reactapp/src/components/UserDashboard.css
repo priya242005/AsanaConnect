@@ -1,0 +1,273 @@
+.instructor-dashboard-wrapper {
+  display: flex;
+  height: 100vh;
+  background-color: #f9fafb;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #1e40af; /* Indigo 700 */
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-nav {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-nav button {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-nav button.active,
+.sidebar-nav button:hover {
+  background-color: #2563eb; /* Indigo 600 */
+  color: #fff;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.instructor-navbar {
+  background-color: white;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb; /* Tailwind gray-200 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.nav-actions span {
+  margin-right: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.nav-actions button {
+  background-color: #2563eb;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.nav-actions button:hover {
+  background-color: #1e40af;
+}
+
+.content-section {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sessions-list {
+  margin-top: 1rem;
+}
+
+.session-item {
+  background: white;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.08);
+}
+
+.session-item h3 {
+  margin-top: 0;
+  color: #2563eb;
+}
+
+.session-item p {
+  margin: 0.3rem 0;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.session-item button {
+  margin-top: 0.7rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.session-item button:hover:not(:disabled) {
+  background-color: #1e40af;
+}
+
+.session-item button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.search-input {
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  outline-offset: 2px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
+  outline: none;
+}
+
+.feedback-section {
+  margin-top: 1rem;
+}
+
+.feedback-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.08);
+  margin-bottom: 1rem;
+}
+
+.feedback-item strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #2563eb;
+}
+
+.profile-section {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.profile-section h2 {
+  margin-bottom: 1rem;
+}
+
+.profile-section p {
+  font-size: 1rem;
+  margin: 0.3rem 0;
+}
+.password-update-section {
+  max-width: 400px;
+  margin: 1rem auto;
+  background-color: #fafafa;
+  padding: 20px 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.password-update-section h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.password-update-section form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  margin-top: 1rem;
+}
+
+.password-update-section form input {
+  width: 100%;
+  padding: 10px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.password-update-section form input:focus {
+  border-color: #2563eb; /* blue focus */
+  outline: none;
+}
+
+.password-update-section form .input-error {
+  border-color: #d14343 !important;
+}
+
+.password-update-section form .error-msg {
+  color: #d14343;
+  font-size: 0.875rem;
+  margin-top: 0.2rem;
+}
+
+.password-update-section form .form-error {
+  margin-top: 1rem;
+  color: #b91c1c;
+  font-weight: 700;
+  text-align: center;
+}
+
+.password-update-section form .success-msg {
+  margin-top: 1rem;
+  color: #15803d;
+  font-weight: 700;
+  text-align: center;
+}
+
+.password-update-section form button[type="submit"] {
+  margin-top: 1.8rem;
+  width: 100%;
+  padding: 12px 0;
+  background-color: #2563eb;
+  color: white;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.password-update-section form button[type="submit"]:hover:not(:disabled) {
+  background-color: #1e40af;
+}
+
+.password-update-section form button[disabled] {
+  background-color: #a5b4fc;
+  cursor: not-allowed;
+}

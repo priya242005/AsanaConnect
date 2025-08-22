@@ -1,11 +1,11 @@
 package com.examly.springapp.service;
 
-import java.util.List;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -14,6 +14,7 @@ public class UserService {
     private UserRepo repo;
 
     public User addUser(User user) {
+        // Add validation or password encryption here as needed
         return repo.save(user);
     }
 
@@ -25,19 +26,15 @@ public class UserService {
         return repo.findById(id).orElse(null);
     }
 
-    public User updateUser(Long id, User updatedUser) {
-        Optional<User> optionalUser = repo.findById(id);
-        if (optionalUser.isPresent()) {
-            User existing = optionalUser.get();
-            existing.setName(updatedUser.getName());
-            existing.setEmail(updatedUser.getEmail());
-            existing.setPhone(updatedUser.getPhone());
-            existing.setPasswordHash(updatedUser.getPasswordHash());
-            existing.setLoyaltyTier(updatedUser.getLoyaltyTier());
-            existing.setGender(updatedUser.getGender());
+    public User updateUser(Long id, User updated) {
+        return repo.findById(id).map(existing -> {
+            existing.setName(updated.getName());
+            existing.setEmail(updated.getEmail());
+            if (updated.getPassword() != null && !updated.getPassword().isEmpty()) {
+                existing.setPassword(updated.getPassword());  // Update password if provided
+            }
             return repo.save(existing);
-        }
-        return null;
+        }).orElse(null);
     }
 
     public boolean deleteUser(Long id) {
@@ -46,5 +43,29 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    // Authenticate by name (username) and password
+    public boolean authenticate(String name, String password) {
+        return repo.findByName(name)
+                .map(user -> user.getPassword().equals(password))
+                .orElse(false);
+    }
+
+    // Fetch user by name (username)
+    public User getUserByName(String name) {
+        return repo.findByName(name).orElse(null);
+    }
+
+    // New method for password update with verification
+    public boolean updatePassword(Long userId, String currentPassword, String newPassword) {
+        return repo.findById(userId).map(user -> {
+            if (user.getPassword().equals(currentPassword)) {  // Verify current password
+                user.setPassword(newPassword);
+                repo.save(user);
+                return true;
+            }
+            return false; // Current password mismatch
+        }).orElse(false);
     }
 }

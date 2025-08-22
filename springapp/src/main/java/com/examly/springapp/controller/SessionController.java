@@ -6,49 +6,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/session")
+
 public class SessionController {
 
     @Autowired
-    private SessionService service;
+    private SessionService sessionService;
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addSession(@RequestBody Session session) {
-        return ResponseEntity.ok(service.addSession(session));
+    @PostMapping("/instructors/{instructorId}/sessions/create")
+    public ResponseEntity<?> createSession(@PathVariable Long instructorId, @RequestBody Session session) {
+        if (session.getSessionName() == null || session.getSessionName().isEmpty() ||
+            session.getSessionTime() == null || session.getDurationMinutes() == null) {
+            return ResponseEntity.badRequest().body("Mandatory fields missing");
+        }
+
+        try {
+            Session created = sessionService.createSession(instructorId, session);
+            return ResponseEntity.ok(created);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 
-    @GetMapping("/getall")
-    public ResponseEntity<?> getAllSessions() {
-        return ResponseEntity.ok(service.getAllSessions());
+    @GetMapping("/instructors/{instructorId}/sessions")
+    public ResponseEntity<List<Session>> getSessions(@PathVariable Long instructorId) {
+        return ResponseEntity.ok(sessionService.getSessionsByInstructor(instructorId));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getSessionById(@PathVariable Long id) {
-        Session session = service.getSessionById(id);
-        return session != null ? ResponseEntity.ok(session) : ResponseEntity.status(404).body("Session not found");
+    @DeleteMapping("/instructors/sessions/{sessionId}")
+    public ResponseEntity<?> deleteSession(@PathVariable Long sessionId) {
+        boolean deleted = sessionService.deleteSession(sessionId);
+        if (deleted) {
+            return ResponseEntity.ok("Session deleted successfully");
+        }
+        return ResponseEntity.status(404).body("Session not found");
     }
-
-    @GetMapping("/learner/{learnerId}")
-    public ResponseEntity<?> getByLearner(@PathVariable Long learnerId) {
-        return ResponseEntity.ok(service.getSessionsByLearnerId(learnerId));
-    }
-
-    @GetMapping("/instructor/{instructorId}")
-    public ResponseEntity<?> getByInstructor(@PathVariable Long instructorId) {
-        return ResponseEntity.ok(service.getSessionsByInstructorId(instructorId));
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateSession(@PathVariable Long id, @RequestBody Session session) {
-        Session updated = service.updateSession(id, session);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.status(404).body("Session not found");
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteSession(@PathVariable Long id) {
-        boolean deleted = service.deleteSession(id);
-        return deleted ? ResponseEntity.ok("Session deleted") : ResponseEntity.status(404).body("Session not found");
+    @GetMapping("/sessions")
+    public ResponseEntity<List<Session>> getAllSessions() {
+        List<Session> sessions = sessionService.getAllSessions();
+        return ResponseEntity.ok(sessions);
     }
 }

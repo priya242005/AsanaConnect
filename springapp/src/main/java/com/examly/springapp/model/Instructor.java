@@ -1,11 +1,12 @@
 package com.examly.springapp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
 
 @Entity
 @Data
@@ -29,7 +30,7 @@ public class Instructor {
 
     private String yogaSpecialty;
 
-    private String classPreference; 
+    private String classPreference;
 
     @Schema(description = "Phone number of instructor")
     private String phoneNumber;
@@ -51,8 +52,19 @@ public class Instructor {
     @Schema(description = "Gender of the instructor")
     private Gender gender;
 
+    @NotBlank(message = "Password is required")
+    @Schema(description = "Password for instructor login")
+    private String password;
+
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("instructor-session")
+    private List<Session> sessions;
+
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("instructor-booking")
+    private List<Booking> bookings;
+
     public enum Gender {
         MALE, FEMALE, OTHER
     }
 }
- 
