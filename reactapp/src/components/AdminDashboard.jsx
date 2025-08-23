@@ -28,6 +28,7 @@ function AdminDashboard({ loggedInAdmin, setLoggedInAdmin }) {
   const [adminName, setAdminName] = useState("");
   const [instructors, setInstructors] = useState([]);
   const [users, setUsers] = useState([]);
+  const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("welcome");
 
@@ -46,8 +47,15 @@ function AdminDashboard({ loggedInAdmin, setLoggedInAdmin }) {
         const insData = await insRes.json();
         const userRes = await fetch("http://localhost:8080/users/all");
         const userData = await userRes.json();
+        const sessionRes = await fetch("http://localhost:8080/sessions");
+        let sessionData = await sessionRes.json();
+        if (!Array.isArray(sessionData)) {
+          sessionData = sessionData.sessions || [];
+        }
+
         setInstructors(insData);
         setUsers(userData);
+        setSessions(sessionData);
       } catch {
         alert("Error fetching data");
       } finally {
@@ -102,11 +110,12 @@ function AdminDashboard({ loggedInAdmin, setLoggedInAdmin }) {
     { id: "welcome", label: "Welcome" },
     { id: "instructors", label: "Instructors" },
     { id: "users", label: "Users" },
+    { id: "sessions", label: "Sessions" },
     { id: "updatePassword", label: "Update Password" },
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
       <div className="admin-dashboard-wrapper" style={{ flexGrow: 1 }}>
         <aside className="sidebar">
           <nav className="sidebar-nav">
@@ -115,6 +124,7 @@ function AdminDashboard({ loggedInAdmin, setLoggedInAdmin }) {
                 key={item.id}
                 className={activeSection === item.id ? "active" : ""}
                 onClick={() => setActiveSection(item.id)}
+                style={{ fontFamily: "inherit" }}
               >
                 {item.label}
               </button>
@@ -123,7 +133,7 @@ function AdminDashboard({ loggedInAdmin, setLoggedInAdmin }) {
         </aside>
 
         <main className="main-content">
-          <header className="admin-navbar">
+          <header className="admin-navbar" style={{ fontFamily: "inherit" }}>
             <div className="brand" style={{ display: "flex", alignItems: "center" }}>
               <img
                 src="/logo.png"
@@ -133,13 +143,13 @@ function AdminDashboard({ loggedInAdmin, setLoggedInAdmin }) {
               AsanaConnect Admin - {adminName}
             </div>
             <div className="nav-actions">
-              <button className="logout-btn" onClick={handleLogout}>
+              <button className="logout-btn" onClick={handleLogout} style={{ fontFamily: "inherit" }}>
                 Logout
               </button>
             </div>
           </header>
 
-          <section className="content-section">
+          <section className="content-section" style={{ fontFamily: "inherit" }}>
             {activeSection === "welcome" && (
               <WelcomeSection
                 instructorsCount={instructors.length}
@@ -150,9 +160,8 @@ function AdminDashboard({ loggedInAdmin, setLoggedInAdmin }) {
             {activeSection === "instructors" && (
               <InstructorsList instructors={instructors} onDelete={handleDeleteInstructor} />
             )}
-            {activeSection === "users" && (
-              <UsersList users={users} onDelete={handleDeleteUser} />
-            )}
+            {activeSection === "users" && <UsersList users={users} onDelete={handleDeleteUser} />}
+            {activeSection === "sessions" && <SessionsList sessions={sessions} />}
             {activeSection === "updatePassword" && (
               <UpdatePasswordForm adminName={adminName} onClose={() => setActiveSection("welcome")} />
             )}
@@ -165,45 +174,60 @@ function AdminDashboard({ loggedInAdmin, setLoggedInAdmin }) {
   );
 }
 
-
 function WelcomeSection({ instructorsCount, usersCount, adminName }) {
   const maxValue = Math.max(instructorsCount, usersCount, 10);
 
   return (
-    <div className="welcome-content">
-      <h1>Welcome, {adminName}</h1>
-      <div className="performance-overview">
+    <div
+      className="welcome-content"
+      style={{ fontFamily: "inherit", textAlign: "center", padding: "2rem" }}
+    >
+      {/* Logo */}
+      <img
+        src="/logo.png" // Adjust path if needed
+        alt="AsanaConnect Logo"
+        style={{ width: 80, marginBottom: "1rem" }}
+      />
+
+      <h1 style={{ fontFamily: "inherit" }}>Welcome, {adminName}</h1>
+
+      <div
+        className="performance-overview"
+        style={{ display: "flex", justifyContent: "center", gap: "40px", marginTop: "1.5rem" }}
+      >
         <div className="performance-circle large">
           <AnimatedCircularProgressbar
             value={instructorsCount}
             maxValue={maxValue}
-            text={`${instructorsCount} Instructors`}
+            subtext={`${instructorsCount} Instructors`}
             pathColor="#2563eb"
             trailColor="#dbeafe"
-            textColor="#2563eb"
           />
         </div>
         <div className="performance-circle large">
           <AnimatedCircularProgressbar
             value={usersCount}
             maxValue={maxValue}
-            text={`${usersCount} Users`}
+            subtext={`${usersCount} Users`}
             pathColor="#10b981"
             trailColor="#d1fae5"
-            textColor="#10b981"
           />
         </div>
       </div>
-      <p className="welcome-description">
+
+      <p
+        className="welcome-description"
+        style={{ fontFamily: "inherit", marginTop: "2rem", fontSize: "1.1rem" }}
+      >
         Your platform has <strong>{instructorsCount}</strong> active instructors and{" "}
-        <strong>{usersCount}</strong> registered users. Use the menu on the left to manage and review their information.
+        <strong>{usersCount}</strong> registered users.
       </p>
     </div>
   );
 }
 
 
-function AnimatedCircularProgressbar({ value, maxValue, text, pathColor, trailColor, textColor }) {
+function AnimatedCircularProgressbar({ value, maxValue, subtext, pathColor, trailColor }) {
   const [progress, setProgress] = React.useState(0);
 
   React.useEffect(() => {
@@ -221,20 +245,62 @@ function AnimatedCircularProgressbar({ value, maxValue, text, pathColor, trailCo
   }, [value]);
 
   return (
-    <CircularProgressbar
-      value={progress}
-      maxValue={maxValue}
-      text={text}
-      styles={buildStyles({
-        pathColor,
-        trailColor,
-        textColor,
-        textSize: "12px",
-      })}
-    />
+    <div
+      style={{
+        width: 160, // Increased size
+        height: 160,
+        margin: "0 auto",
+        position: "relative",
+        borderRadius: "50%",
+      }}
+    >
+      <CircularProgressbar
+        value={progress}
+        maxValue={maxValue}
+        text={" "}
+        styles={buildStyles({
+          pathColor,
+          trailColor,
+        })}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "32%",
+          width: "100%",
+          left: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          pointerEvents: "none",
+          fontFamily: "inherit",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "2.3rem",
+            fontWeight: 700,
+            color: pathColor,
+            lineHeight: 1.1,
+          }}
+        >
+          {typeof value === "number" ? Math.round(value) : "-"}
+        </span>
+        <span
+          style={{
+            fontSize: "1.15rem",
+            color: pathColor,
+            fontWeight: 700,
+            marginTop: 2,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {subtext}
+        </span>
+      </div>
+    </div>
   );
 }
-
 
 function UpdatePasswordForm({ adminName, onClose }) {
   const [currentPassword, setCurrentPassword] = React.useState("");
@@ -267,8 +333,8 @@ function UpdatePasswordForm({ adminName, onClose }) {
   };
 
   return (
-    <div className="update-password-container">
-      <h2>Update Password for {adminName}</h2>
+    <div className="update-password-container" style={{ fontFamily: "inherit" }}>
+      <h2 style={{ fontFamily: "inherit" }}>Update Password for {adminName}</h2>
       <form onSubmit={handleSubmit}>
         <label>Current Password:</label>
         <input
@@ -276,6 +342,7 @@ function UpdatePasswordForm({ adminName, onClose }) {
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           required
+          style={{ fontFamily: "inherit" }}
         />
         <label>New Password:</label>
         <input
@@ -283,14 +350,16 @@ function UpdatePasswordForm({ adminName, onClose }) {
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           required
+          style={{ fontFamily: "inherit" }}
         />
-        <button type="submit">Update Password</button>
+        <button type="submit" style={{ fontFamily: "inherit" }}>
+          Update Password
+        </button>
       </form>
-      {message && <p className="message">{message}</p>}
+      {message && <p className="message" style={{ fontFamily: "inherit" }}>{message}</p>}
     </div>
   );
 }
-
 
 function InstructorsList({ instructors, onDelete }) {
   const [filter, setFilter] = React.useState("");
@@ -308,7 +377,7 @@ function InstructorsList({ instructors, onDelete }) {
   });
 
   return (
-    <div>
+    <div style={{ fontFamily: "inherit" }}>
       <h2>Instructors</h2>
       <input
         type="search"
@@ -316,19 +385,20 @@ function InstructorsList({ instructors, onDelete }) {
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
         className="filter-input"
+        style={{ fontFamily: "inherit" }}
       />
-      <ul className="data-list">
+      <ul className="data-list" style={{ fontFamily: "inherit" }}>
         {filtered.length > 0 ? (
           filtered.map((inst) => (
-            <li key={inst.instructorId} className="data-item">
+            <li key={inst.instructorId} className="data-item" style={{ fontFamily: "inherit" }}>
               <div>
                 <strong>{inst.name}</strong> – {inst.yogaSpecialty || "N/A"}
                 <br />
-                <span>
+                <span style={{ fontFamily: "inherit" }}>
                   Certification: {inst.certification}, Phone: {inst.phoneNumber}, Exp: {inst.experienceYears} years
                 </span>
               </div>
-              <button className="delete-btn" onClick={() => onDelete(inst.instructorId)}>
+              <button className="delete-btn" onClick={() => onDelete(inst.instructorId)} style={{ fontFamily: "inherit" }}>
                 Delete
               </button>
             </li>
@@ -340,7 +410,6 @@ function InstructorsList({ instructors, onDelete }) {
     </div>
   );
 }
-
 
 function UsersList({ users, onDelete }) {
   const [filter, setFilter] = React.useState("");
@@ -355,7 +424,7 @@ function UsersList({ users, onDelete }) {
   });
 
   return (
-    <div>
+    <div style={{ fontFamily: "inherit" }}>
       <h2>Users</h2>
       <input
         type="search"
@@ -363,22 +432,63 @@ function UsersList({ users, onDelete }) {
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
         className="filter-input"
+        style={{ fontFamily: "inherit" }}
       />
-      <ul className="data-list">
+      <ul className="data-list" style={{ fontFamily: "inherit" }}>
         {filtered.length > 0 ? (
           filtered.map((user) => (
-            <li key={user.userId} className="data-item">
+            <li key={user.userId} className="data-item" style={{ fontFamily: "inherit" }}>
               <div>
                 <strong>{user.name}</strong> – {user.email}
                 {user.phoneNumber ? <> | {user.phoneNumber}</> : null}
               </div>
-              <button className="delete-btn" onClick={() => onDelete(user.userId)}>
+              <button className="delete-btn" onClick={() => onDelete(user.userId)} style={{ fontFamily: "inherit" }}>
                 Delete
               </button>
             </li>
           ))
         ) : (
           <li>No users found.</li>
+        )}
+      </ul>
+    </div>
+  );
+}
+
+function SessionsList({ sessions }) {
+  const [filter, setFilter] = React.useState("");
+
+  const safeSessions = Array.isArray(sessions) ? sessions : [];
+
+  const filteredSessions = safeSessions.filter((session) =>
+    session.sessionName?.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  return (
+    <div style={{ fontFamily: "inherit" }}>
+      <h2>Sessions</h2>
+      <input
+        type="search"
+        placeholder="Search sessions"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        className="filter-input"
+        style={{ fontFamily: "inherit" }}
+      />
+      <ul className="data-list" style={{ fontFamily: "inherit" }}>
+        {filteredSessions.length > 0 ? (
+          filteredSessions.map((session) => (
+            <li key={session.sessionId} className="data-item" style={{ fontFamily: "inherit" }}>
+              <div>
+                <strong>{session.sessionName}</strong> –{" "}
+                {session.sessionTime ? new Date(session.sessionTime).toLocaleString() : "No date"}
+                <br />
+                <span style={{ fontFamily: "inherit" }}>Slots: {session.slots}</span>
+              </div>
+            </li>
+          ))
+        ) : (
+          <li>No sessions found.</li>
         )}
       </ul>
     </div>

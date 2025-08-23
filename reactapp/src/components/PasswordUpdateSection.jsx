@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function PasswordUpdateSection({ user }) {
   const [formData, setFormData] = useState({
+    email: "",              // add email here
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
@@ -10,6 +11,13 @@ function PasswordUpdateSection({ user }) {
   const [submitError, setSubmitError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Populate email from user prop
+  useEffect(() => {
+    if (user?.email) {
+      setFormData((prev) => ({ ...prev, email: user.email }));
+    }
+  }, [user]);
 
   const validate = () => {
     const errs = {};
@@ -21,7 +29,8 @@ function PasswordUpdateSection({ user }) {
   };
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors({});
     setSubmitError("");
     setSuccessMsg("");
@@ -48,6 +57,7 @@ function PasswordUpdateSection({ user }) {
         body: JSON.stringify({
           currentPassword: formData.currentPassword,
           newPassword: formData.newPassword,
+          // email is not typically sent for password update, omit if backend doesn't expect it
         }),
       });
 
@@ -56,7 +66,7 @@ function PasswordUpdateSection({ user }) {
         setSubmitError(msg || "Password update failed");
       } else {
         setSuccessMsg("Password updated successfully.");
-        setFormData({ currentPassword: "", newPassword: "", confirmNewPassword: "" });
+        setFormData((prev) => ({ ...prev, currentPassword: "", newPassword: "", confirmNewPassword: "" }));
       }
     } catch {
       setSubmitError("Network error. Please try again later.");
@@ -68,6 +78,17 @@ function PasswordUpdateSection({ user }) {
     <div className="password-update-section">
       <h2>Change Password</h2>
       <form onSubmit={handleSubmit} noValidate>
+        <label>
+          Email
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            readOnly
+            style={{ backgroundColor: "#f0f0f0", cursor: "not-allowed", marginBottom: "1rem" }}
+          />
+        </label>
+
         <label>
           Current Password <span className="required">*</span>
           <input

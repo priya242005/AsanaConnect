@@ -5,21 +5,22 @@ function NewSessionSection({ instructorId, refreshSessions }) {
   const [sessionDate, setSessionDate] = useState("");
   const [sessionTime, setSessionTime] = useState("");
   const [durationMinutes, setDurationMinutes] = useState("");
+  const [slots, setSlots] = useState("");
+  const [emotion, setEmotion] = useState("happy"); // default emotion
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Current date in yyyy-MM-dd format for date input min attribute
   const now = new Date();
   const currentDate = now.toISOString().split("T")[0];
-
-  // Current time in HH:mm format for time input min attribute
   const currentTime = now.toTimeString().slice(0, 5);
+
+  const emotions = ["happy", "sad", "excited", "relaxed", "angry"];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage(null);
 
-    if (!sessionName || !sessionDate || !sessionTime || !durationMinutes) {
+    if (!sessionName || !sessionDate || !sessionTime || !durationMinutes || !slots) {
       setMessage("Please fill in all mandatory fields.");
       return;
     }
@@ -29,7 +30,11 @@ function NewSessionSection({ instructorId, refreshSessions }) {
       return;
     }
 
-    // Combine date and time into a Date object
+    if (slots < 1) {
+      setMessage("Slots must be at least 1.");
+      return;
+    }
+
     const sessionDateTime = new Date(`${sessionDate}T${sessionTime}`);
 
     if (sessionDateTime < now) {
@@ -47,6 +52,8 @@ function NewSessionSection({ instructorId, refreshSessions }) {
           sessionName,
           sessionTime: sessionDateTime.toISOString(),
           durationMinutes: parseInt(durationMinutes, 10),
+          slots: parseInt(slots, 10),
+          emotion,
         }),
       });
 
@@ -56,6 +63,8 @@ function NewSessionSection({ instructorId, refreshSessions }) {
         setSessionDate("");
         setSessionTime("");
         setDurationMinutes("");
+        setSlots("");
+        setEmotion("happy");
         if (refreshSessions) refreshSessions();
       } else {
         const errorText = await response.text();
@@ -114,6 +123,28 @@ function NewSessionSection({ instructorId, refreshSessions }) {
             onChange={(e) => setDurationMinutes(e.target.value)}
             required
           />
+        </label>
+
+        <label>
+          Slots <span style={{ color: "red" }}>*</span>:
+          <input
+            type="number"
+            min="1"
+            value={slots}
+            onChange={(e) => setSlots(e.target.value)}
+            required
+          />
+        </label>
+
+        <label>
+          Emotion <span style={{ color: "red" }}>*</span>:
+          <select value={emotion} onChange={(e) => setEmotion(e.target.value)} required>
+            {emotions.map((emo) => (
+              <option key={emo} value={emo}>
+                {emo.charAt(0).toUpperCase() + emo.slice(1)}
+              </option>
+            ))}
+          </select>
         </label>
 
         <button type="submit" disabled={loading}>

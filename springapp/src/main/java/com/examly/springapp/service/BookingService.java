@@ -1,18 +1,18 @@
 package com.examly.springapp.service;
 
+import com.examly.springapp.dto.BookingDTO;
+import com.examly.springapp.dto.SessionDTO;
 import com.examly.springapp.model.Booking;
 import com.examly.springapp.model.Instructor;
 import com.examly.springapp.model.Session;
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.BookingRepo;
-import com.examly.springapp.service.InstructorService;
-import com.examly.springapp.service.SessionService;
-import com.examly.springapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -31,7 +31,7 @@ public class BookingService {
 
     public Booking bookSession(Long userId, Long sessionId) {
         Optional<User> userOpt = Optional.ofNullable(userService.getUserById(userId));
-        Optional<Session> sessionOpt = Optional.ofNullable(sessionService.getSessionById(sessionId));
+        Optional<Session> sessionOpt = sessionService.getSessionById(sessionId);
 
         if (userOpt.isEmpty()) {
             throw new RuntimeException("User not found");
@@ -66,8 +66,33 @@ public class BookingService {
         }
         return false;
     }
-   public List<Booking> getBookingsByUser(Long userId) {
-        return bookingRepo.findBookingsWithSessionByUserId(userId);
+
+    // Updated method to return DTOs
+    public List<BookingDTO> getBookingsByUser(Long userId) {
+        List<Booking> bookings = bookingRepo.findBookingsWithSessionByUserId(userId);
+
+        return bookings.stream().map(booking -> {
+            Session session = booking.getSession();
+            SessionDTO sessionDTO = new SessionDTO(
+                    session.getSessionId(),
+                    session.getSessionName(),
+                    session.getSessionTime(),
+                    session.getDurationMinutes(),
+                    session.getMeetingLink()
+                    , session.getEmotion(),
+                    session.getSlots()
+            );
+            return new BookingDTO(booking.getBookingId(), sessionDTO);
+        }).collect(Collectors.toList());
     }
-   
+
+    /**
+     * Check if a user has booked the specified session.
+     * @param userId ID of the user
+     * @param sessionId ID of the session
+     * @return true if booking exists, false otherwise
+     */
+    public boolean hasUserBookedSession(Long userId, Long sessionId) {
+        return bookingRepo.existsByUserUserIdAndSessionSessionId(userId, sessionId);
+    }
 }

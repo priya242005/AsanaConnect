@@ -16,7 +16,14 @@ public interface BookingRepo extends JpaRepository<Booking, Long> {
 
     // Count how many bookings exist for a given session by session ID
     Long countBySessionSessionId(Long sessionId);
+
     List<Booking> findByUserUserId(Long userId);
+
     @Query("SELECT b FROM Booking b JOIN FETCH b.session WHERE b.user.userId = :userId")
     List<Booking> findBookingsWithSessionByUserId(@Param("userId") Long userId);
+
+    boolean existsByUserUserIdAndSessionSessionId(Long userId, Long sessionId);
+
+    // Add this line for deleting all bookings for a session
+    void deleteBySessionSessionId(Long sessionId);
 }

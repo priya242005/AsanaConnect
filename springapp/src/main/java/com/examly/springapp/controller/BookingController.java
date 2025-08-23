@@ -1,5 +1,6 @@
 package com.examly.springapp.controller;
 
+import com.examly.springapp.dto.BookingDTO;
 import com.examly.springapp.model.Booking;
 import com.examly.springapp.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +44,10 @@ public class BookingController {
         }
         return ResponseEntity.status(404).body("Booking not found");
     }
-   @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Booking>> getBookingsByUser(@PathVariable Long userId) {
-        List<Booking> bookings = bookingService.getBookingsByUser(userId);
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<BookingDTO>> getBookingsByUser(@PathVariable Long userId) {
+        List<BookingDTO> bookings = bookingService.getBookingsByUser(userId);
         return ResponseEntity.ok(bookings);
     }
 }

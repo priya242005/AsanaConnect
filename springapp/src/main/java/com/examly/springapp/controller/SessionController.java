@@ -1,6 +1,7 @@
+// SessionController.java
 package com.examly.springapp.controller;
 
-import com.examly.springapp.model.Session;
+import com.examly.springapp.dto.SessionDTO;
 import com.examly.springapp.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,29 +10,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
 public class SessionController {
 
     @Autowired
     private SessionService sessionService;
 
     @PostMapping("/instructors/{instructorId}/sessions/create")
-    public ResponseEntity<?> createSession(@PathVariable Long instructorId, @RequestBody Session session) {
-        if (session.getSessionName() == null || session.getSessionName().isEmpty() ||
-            session.getSessionTime() == null || session.getDurationMinutes() == null) {
+    public ResponseEntity<?> createSession(@PathVariable Long instructorId, @RequestBody SessionDTO sessionDTO) {
+        if (sessionDTO.getSessionName() == null || sessionDTO.getSessionName().isEmpty() ||
+                sessionDTO.getSessionTime() == null || sessionDTO.getDurationMinutes() == null ||
+                sessionDTO.getEmotion() == null || sessionDTO.getSlots() == null) {
             return ResponseEntity.badRequest().body("Mandatory fields missing");
         }
 
         try {
-            Session created = sessionService.createSession(instructorId, session);
-            return ResponseEntity.ok(created);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            SessionDTO createdSession = sessionService.createSession(instructorId, sessionDTO);
+            return ResponseEntity.ok(createdSession);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(500).body(ex.getMessage());
         }
     }
 
     @GetMapping("/instructors/{instructorId}/sessions")
-    public ResponseEntity<List<Session>> getSessions(@PathVariable Long instructorId) {
+    public ResponseEntity<List<SessionDTO>> getSessions(@PathVariable Long instructorId) {
         return ResponseEntity.ok(sessionService.getSessionsByInstructor(instructorId));
     }
 
@@ -43,9 +44,18 @@ public class SessionController {
         }
         return ResponseEntity.status(404).body("Session not found");
     }
+
     @GetMapping("/sessions")
-    public ResponseEntity<List<Session>> getAllSessions() {
-        List<Session> sessions = sessionService.getAllSessions();
+    public ResponseEntity<List<SessionDTO>> getAvailableSessions(
+            @RequestParam(required = false) String emotion) {
+        List<SessionDTO> sessions = sessionService.getAllAvailableSessions();
+
+        if (emotion != null && !emotion.isEmpty()) {
+            sessions = sessions.stream()
+                    .filter(s -> s.getEmotion().equalsIgnoreCase(emotion))
+                    .toList();
+        }
+
         return ResponseEntity.ok(sessions);
     }
 }

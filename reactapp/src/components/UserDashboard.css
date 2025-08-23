@@ -1,9 +1,11 @@
+/* Container wrappers */
 .instructor-dashboard-wrapper {
   display: flex;
   height: 100vh;
   background-color: #f9fafb;
 }
 
+/* Sidebar */
 .sidebar {
   width: 220px;
   background-color: #1e40af; /* Indigo 700 */
@@ -37,12 +39,14 @@
   color: #fff;
 }
 
+/* Main content */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
+/* Navbar */
 .instructor-navbar {
   background-color: white;
   padding: 1rem 1.5rem;
@@ -86,12 +90,14 @@
   background-color: #1e40af;
 }
 
+/* Content section */
 .content-section {
   padding: 2rem;
   overflow-y: auto;
   flex: 1;
 }
 
+/* Welcome Section */
 .welcome-content {
   display: flex;
   flex-direction: column;
@@ -99,6 +105,7 @@
   justify-content: center;
 }
 
+/* Sessions list */
 .sessions-list {
   margin-top: 1rem;
 }
@@ -143,6 +150,7 @@
   cursor: not-allowed;
 }
 
+/* Search input */
 .search-input {
   border: 2px solid #cbd5e1;
   border-radius: 8px;
@@ -158,6 +166,7 @@
   outline: none;
 }
 
+/* Feedback Section */
 .feedback-section {
   margin-top: 1rem;
 }
@@ -176,6 +185,7 @@
   color: #2563eb;
 }
 
+/* Profile Section */
 .profile-section {
   max-width: 600px;
   margin: 0 auto;
@@ -189,6 +199,8 @@
   font-size: 1rem;
   margin: 0.3rem 0;
 }
+
+/* Password Update Section */
 .password-update-section {
   max-width: 400px;
   margin: 1rem auto;
@@ -271,3 +283,5 @@
   background-color: #a5b4fc;
   cursor: not-allowed;
 }
+
+/* Additional improvements could be added to modal, feedback, bookings styles, as needed */
