@@ -68,7 +68,6 @@ function ProfileSection({ instructor, setInstructor }) {
     setMessage(null);
 
     try {
-      // Validate currentPassword presence in backend before update
       const res = await fetch(`http://localhost:8080/instructor/put/${instructor.instructorId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

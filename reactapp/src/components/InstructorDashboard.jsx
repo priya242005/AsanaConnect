@@ -4,7 +4,7 @@ import NewSessionSection from "./NewSessionSection";
 import SessionsSection from "./SessionsSection";
 import ProfileSection from "./ProfileSection";
 import InstructorPasswordUpdate from "./InstructorPasswordUpdate";
-import FeedbackSection from "./FeedbackSection"; // Import FeedbackSection
+import FeedbackSection from "./FeedbackSection"; 
 import "./InstructorDashboard.css";
 
 function Footer() {
@@ -65,14 +65,14 @@ function InstructorDashboard({ loggedInInstructor, setLoggedInInstructor }) {
     { id: "welcome", label: "Welcome" },
     { id: "newSession", label: "New Session" },
     { id: "sessions", label: "Sessions" },
-    { id: "feedback", label: "Feedback" }, // New Feedback menu
+    { id: "feedback", label: "Feedback" }, 
     { id: "profile", label: "Profile" },
     { id: "password", label: "Change Password" },
   ];
 
-  // Inline circular progress in welcome section
+
   const WelcomeSection = () => {
-    const totalBooked = sessions.length; // Assuming sessions count is the metric
+    const totalBooked = sessions.length; 
     const targetSessions = 10;
     const progress = Math.min(100, Math.round((totalBooked / targetSessions) * 100));
 

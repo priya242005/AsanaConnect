@@ -41,7 +41,6 @@ function UserProfileSection({ user, updateUserInDashboard }) {
     setSuccessMsg("");
 
     try {
-      // Backend calls endpoint to update profile with password verification
       const res = await fetch(`http://localhost:8080/users/${user.userId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -49,7 +48,6 @@ function UserProfileSection({ user, updateUserInDashboard }) {
           name: formData.name,
           email: formData.email,
           currentPassword: formData.currentPassword,
-          // Do NOT send new password here
         }),
       });
 

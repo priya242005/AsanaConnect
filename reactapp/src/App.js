@@ -11,7 +11,7 @@ import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminProfile from "./components/AdminProfile";
 import InstructorDashboard from "./components/InstructorDashboard";
-
+import ChatbotWidget from "./components/ChatbotWidget";
 function App() {
   // User login state
   const [loggedInUser, setLoggedInUser] = useState(() => {
@@ -41,7 +41,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-
+  
         {/* Instructor routes */}
         <Route
           path="/login"
@@ -136,6 +136,7 @@ function App() {
         {/* Fallback route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <ChatbotWidget/>
     </BrowserRouter>
   );
 }

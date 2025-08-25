@@ -37,8 +37,7 @@ function UserDashboard({ loggedInUser, setLoggedInUser }) {
   const [bookingStatus, setBookingStatus] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Feedback state
-  const [feedbacks, setFeedbacks] = useState({}); // keyed by sessionId
+  const [feedbacks, setFeedbacks] = useState({}); 
   const [feedbackFormSessionId, setFeedbackFormSessionId] = useState(null);
 
   useEffect(() => {
@@ -102,7 +101,7 @@ function UserDashboard({ loggedInUser, setLoggedInUser }) {
       });
       setFeedbacks(feedbackBySession);
     } catch {
-      // Ignored
+     
     }
   }
 
@@ -140,7 +139,6 @@ function UserDashboard({ loggedInUser, setLoggedInUser }) {
     navigate("/");
   };
 
-  // Handlers for feedback form open/close and refresh
   const openFeedbackForm = (sessionId) => {
     setFeedbackFormSessionId(sessionId);
   };
